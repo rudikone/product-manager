@@ -1,0 +1,45 @@
+services:
+  # База данных PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: clean-spring-boot-db
+    environment:
+      POSTGRES_DB: yourdatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d yourdatabase" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin (опционально, для управления БД)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: clean-spring-boot-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+  # MailHog (опционально, для перехвата email в разработке)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: clean-spring-boot-mailhog
+    ports:
+      - "1025:1025"   # SMTP порт
+      - "8025:8025"   # Web UI
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
