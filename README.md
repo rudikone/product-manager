@@ -24,9 +24,9 @@ my-spring-boot-app/
 ├── src/
 │   ├── main/
 │   │   ├── java/
-│   │   │   └── com/
-│   │   │       └── kawser/
-│   │   │           └── cleanspringbootproject/
+│   │   │   └── ru/
+│   │   │       └── rudikov/
+│   │   │           └── productmanager/
 │   │   │               ├── api/
 │   │   │               │   ├── controllers/
 │   │   │               │   ├── models/
@@ -47,16 +47,16 @@ my-spring-boot-app/
 │   │   │               │   ├── api/
 │   │   │               │   ├── auth/
 │   │   │               │   ├── global.handler/
-│   │   │               └── CleanSpringBootProjectApplication.java
+│   │   │               └── ProductManagerApplication.java
 │   │   ├── resources/
 │   │   │   ├── application.properties
 │   │   │   ├── schema.sql
 │   │   │   └── messages.properties
 │   └── test/
 │       ├── java/
-│       │   └── com/
-│       │       └── kawser/
-│       │           └── cleanspringbootproject/
+│       │   └── ru/
+│       │       └── rudikov/
+│       │           └── productmanager/
 │       │               ├── api/
 │       │               │   ├── controllers/
 │       │               │   ├── repositories/
@@ -65,7 +65,7 @@ my-spring-boot-app/
 │       │               │   ├── controllers/
 │       │               │   ├── repositories/
 │       │               │   ├── services/
-│       │               └── CleanSpringBootProjectApplicationTests.java
+│       │               └── ProductManagerApplicationTests.java
 │       └── resources/
 │           └── application-test.properties
 ├── .gitignore
@@ -147,33 +147,8 @@ my-spring-boot-app/
 
 ### Установка
 
-1. Клонируйте репозиторий:
-
-   ```sh
-   git clone https://github.com/yourusername/clean-spring-boot-project.git
-   cd clean-spring-boot-project
-   ```
-
-2. Обновите настройки базы данных в `src/main/resources/application.properties`:
-
-   ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/yourdatabase
-   spring.datasource.username=yourusername
-   spring.datasource.password=yourpassword
-
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
-
-   spring.mail.host=smtp.example.com
-   spring.mail.port=587
-   spring.mail.username=your-email@example.com
-   spring.mail.password=your-email-password
-   spring.mail.properties.mail.smtp.auth=true
-   spring.mail.properties.mail.smtp.starttls.enable=true
-
-   jwt.secret=your-jwt-secret
-   ```
-
+1. ...
+2. ...
 3. Запустите приложение:
 
    ```sh
