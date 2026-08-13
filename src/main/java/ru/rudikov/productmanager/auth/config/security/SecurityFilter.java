@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import java.io.IOException;
  * Фильтр для перехвата запросов и применения правил безопасности.
  */
 @Component
+@Slf4j
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -45,12 +47,20 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
             var login = tokenService.validateToken(token);
+            log.debug("Token validated for user: {}", login);
 
             UserDetails user = userRepository.findByUsername(login);
-
-            // Создаёт токен аутентификации и устанавливает его в SecurityContext
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            if (user != null) {
+                log.debug("User found: {}, authorities: {}", user.getUsername(), user.getAuthorities());
+                
+                // Создаёт токен аутентификации и устанавливает в SecurityContext
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.debug("Authentication set in SecurityContext");
+            } else {
+                log.warn("User not found for username: {}", login);
+            }
         }
         filterChain.doFilter(request, response);
     }

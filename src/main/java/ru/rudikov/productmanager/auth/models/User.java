@@ -16,10 +16,8 @@ import java.util.Set;
 
 /**
  * Сущность пользователя, реализующая интерфейс UserDetails для использования Spring Security.
- * Сущность содержит встроенный класс OneTimePassword для хранения OTP и времени его генерации.
  * Каждый пользователь имеет id, имя пользователя, пароль, email, мобильный телефон и роль.
  *
- * @see OneTimePassword
  * @see UserRole
  * @see UserDetails
  */
@@ -69,23 +67,9 @@ public class User implements UserDetails {
     private String mobilePhone;
 
     /**
-     * Флаг активности пользователя.
-     * По умолчанию false.
-     */
-    @Column(name = "is_enabled", columnDefinition = "boolean default false")
-    private boolean enabled;
-
-    /**
      * Роль пользователя. Это enum UserRole, который может быть USER или ADMIN.
      */
     private UserRole role;
-
-    /**
-     * Встроенный класс для хранения OTP и времени его генерации.
-     */
-    @Embedded
-    private OneTimePassword otp;
-
 
     /**
      * Конструктор для сущности User.
@@ -159,13 +143,14 @@ public class User implements UserDetails {
     }
 
     /**
-     * Возвращает true, если пользователь активирован.
+     * Возвращает true, если пользователь активен.
+     * Всегда возвращает true, так как верификация через OTP удалена.
      *
-     * @return Статус пользователя (активирован или нет).
+     * @return true
      */
     @Override
     public boolean isEnabled() {
-        return this.enabled;
+        return true;
     }
 
 }

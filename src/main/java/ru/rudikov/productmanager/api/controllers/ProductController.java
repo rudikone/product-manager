@@ -5,10 +5,15 @@ import ru.rudikov.productmanager.api.models.dto.ProductDTO;
 import ru.rudikov.productmanager.api.services.IProductService;
 import ru.rudikov.productmanager.api.services.impl.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +30,7 @@ import java.util.ResourceBundle;
  * @see Product
  */
 @RestController
+@Tag(name = "Products", description = "Эндпоинты управления продуктами")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "403", description = "Нет прав доступа к этому ресурсу"),
         @ApiResponse(responseCode = "404", description = "Продукт не найден"),
@@ -50,7 +56,9 @@ public class ProductController {
     @Operation(summary = "Найти все продукты с пагинацией",
             description = "Найти все продукты с пагинацией. Максимальный размер страницы: 60.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукты найдены"),
+            @ApiResponse(responseCode = "200", description = "Продукты найдены",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(type = "array", implementation = ProductDTO.class))),
             @ApiResponse(responseCode = "400", description = "Неверные аргументы пагинации"),
             @ApiResponse(responseCode = "404", description = "Продукты не найдены")
     })
@@ -69,7 +77,10 @@ public class ProductController {
      * @return Сообщение об успешном создании продукта.
      */
     @Operation(summary = "Создать новый продукт", description = "Создать новый продукт с указанными данными")
-    @ApiResponse(responseCode = "200", description = "Продукт создан")
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponse(responseCode = "200", description = "Продукт создан",
+            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE,
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "Product successfully created")))
     @PostMapping("/create")
     public ResponseEntity<String> save(
             @RequestBody @Valid ProductDTO productDTO) {
@@ -84,7 +95,12 @@ public class ProductController {
      * @return DTO найденного продукта.
      */
     @Operation(summary = "Найти продукт по ID", description = "Найти продукт по его ID")
-    @ApiResponse(responseCode = "200", description = "Продукт найден")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Продукт найден",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProductDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Продукт не найден")
+    })
     @GetMapping("/find")
     public ResponseEntity<Optional<ProductDTO>> findById(
             @RequestParam(name = "product") Long productId) {
@@ -100,7 +116,10 @@ public class ProductController {
      * @return Сообщение об успешном обновлении продукта.
      */
     @Operation(summary = "Обновить продукт", description = "Обновить продукт с указанными данными")
-    @ApiResponse(responseCode = "200", description = "Продукт обновлён")
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponse(responseCode = "200", description = "Продукт обновлён",
+            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE,
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "Product successfully updated")))
     @PutMapping("/update")
     public ResponseEntity<String> update(
             @RequestParam(name = "product") Long productId,
@@ -116,7 +135,10 @@ public class ProductController {
      * @return Сообщение об успешном удалении продукта.
      */
     @Operation(summary = "Удалить продукт", description = "Удалить продукт по его ID")
-    @ApiResponse(responseCode = "200", description = "Продукт удалён")
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponse(responseCode = "200", description = "Продукт удалён",
+            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE,
+                    examples = @io.swagger.v3.oas.annotations.media.ExampleObject(value = "Product successfully deleted")))
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(
             @RequestParam(name = "product") Long productId) {

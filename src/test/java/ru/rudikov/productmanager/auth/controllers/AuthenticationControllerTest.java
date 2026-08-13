@@ -37,7 +37,7 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testLogin() throws Exception {
-        String login = faker.lorem().characters(5, 15); // valid login length is between 5 and 15 characters
+        String login = faker.lorem().characters(5, 15);
         String password = faker.lorem().characters(10, 15) + "A1#";
 
         LoginDTO loginDTO = new LoginDTO(login, password);
@@ -74,29 +74,5 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isOk());
 
         verify(authService, times(1)).signup(signupDTO);
-    }
-
-    @Test
-    public void testVerifyAccount() throws Exception {
-        String email = faker.internet().emailAddress();
-        String token = faker.lorem().characters(6);
-
-        mockMvc.perform(post("/auth/verify-account")
-                        .param("email", email)
-                        .param("token", token))
-                .andExpect(status().isOk());
-
-        verify(authService, times(1)).verifyAccount(email, token);
-    }
-
-    @Test
-    public void testResendVerification() throws Exception {
-        String email = faker.internet().emailAddress();
-
-        mockMvc.perform(post("/auth/resend-verification")
-                        .param("email", email))
-                .andExpect(status().isOk());
-
-        verify(authService, times(1)).resendVerification(email);
     }
 }

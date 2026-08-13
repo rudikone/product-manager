@@ -9,8 +9,4 @@ public interface IAuthenticationService {
     LoginResponseDTO login(LoginDTO data);
 
     void signup(SignupDTO data);
-
-    void verifyAccount(String email, String otp);
-
-    void resendVerification(String email);
 }

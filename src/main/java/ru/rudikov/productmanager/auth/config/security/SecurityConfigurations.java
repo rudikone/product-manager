@@ -46,10 +46,6 @@ public class SecurityConfigurations {
                         .requestMatchers("/profile/dashboard").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/verify-account").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/resend-verification").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/password/request-reset").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/password/reset").permitAll()
                         .requestMatchers(HttpMethod.GET,  "/products/**").permitAll()
 
                         // Разрешить только пользователям с ролью ADMIN выполнять POST, PUT, DELETE для /products/**

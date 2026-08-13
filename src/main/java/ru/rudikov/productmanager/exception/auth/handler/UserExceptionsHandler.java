@@ -1,8 +1,6 @@
 package ru.rudikov.productmanager.exception.auth.handler;
 
 import ru.rudikov.productmanager.exception.auth.domain.user.EmailAlreadyExistsException;
-import ru.rudikov.productmanager.exception.auth.domain.user.UserAlreadyVerifiedException;
-import ru.rudikov.productmanager.exception.auth.domain.user.UserNotEnabledException;
 import ru.rudikov.productmanager.exception.auth.domain.user.UserNotFoundException;
 import ru.rudikov.productmanager.exception.auth.domain.user.UsernameAlreadyExistsException;
 import ru.rudikov.productmanager.exception.message.RestErrorMessage;
@@ -54,32 +52,6 @@ public class UserExceptionsHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<RestErrorMessage> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
-        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
-    }
-
-    /**
-     * Обрабатывает UserNotEnabledException.
-     * Возвращает ответ со статусом 400.
-     * @param ex UserNotEnabledException
-     * @return ResponseEntity<RestErrorMessage> со статусом 400 и сообщением исключения
-     */
-    @ExceptionHandler(UserNotEnabledException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<RestErrorMessage> handleUserNotEnabledException(UserNotEnabledException ex) {
-        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
-    }
-
-    /**
-     * Обрабатывает UserAlreadyVerifiedException.
-     * Возвращает ответ со статусом 400.
-     * @param ex UserAlreadyVerifiedException
-     * @return ResponseEntity<RestErrorMessage> со статусом 400 и сообщением исключения
-     */
-    @ExceptionHandler(UserAlreadyVerifiedException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<RestErrorMessage> handleUserAlreadyVerified(UserAlreadyVerifiedException ex) {
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }

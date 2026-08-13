@@ -1,7 +1,6 @@
 package ru.rudikov.productmanager.exception.auth.handler;
 
 import ru.rudikov.productmanager.exception.auth.domain.authentication.InvalidCredentialsException;
-import ru.rudikov.productmanager.exception.auth.domain.authentication.InvalidOtpException;
 import ru.rudikov.productmanager.exception.message.RestErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,19 +24,6 @@ public class AuthExceptionsHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<RestErrorMessage> handleInvalidCredentialsException(InvalidCredentialsException ex) {
-        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
-    }
-
-    /**
-     * Обрабатывает InvalidOtpException.
-     * Возвращает ответ со статусом 401.
-     * @param ex InvalidOtpException
-     * @return ResponseEntity<RestErrorMessage> со статусом 401 и сообщением исключения
-     */
-    @ExceptionHandler(InvalidOtpException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<RestErrorMessage> handleInvalidOtpException(InvalidOtpException ex) {
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.UNAUTHORIZED, ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
     }

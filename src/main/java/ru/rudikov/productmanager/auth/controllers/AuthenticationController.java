@@ -4,11 +4,15 @@ import ru.rudikov.productmanager.auth.models.dto.authentication.LoginDTO;
 import ru.rudikov.productmanager.auth.models.dto.authentication.LoginResponseDTO;
 import ru.rudikov.productmanager.auth.models.dto.authentication.SignupDTO;
 import ru.rudikov.productmanager.auth.services.IAuthenticationService;
-import ru.rudikov.productmanager.auth.services.impl.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,7 @@ import java.util.ResourceBundle;
  */
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "Эндпоинты аутентификации и регистрации пользователей")
 public class AuthenticationController {
 
     private final IAuthenticationService authService;
@@ -41,7 +46,9 @@ public class AuthenticationController {
      */
     @Operation(summary = "Аутентификация пользователя", description = "Аутентификация пользователя с указанными учётными данными и возврат токена при успехе")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Пользователь успешно аутентифицирован, возвращён токен"),
+            @ApiResponse(responseCode = "200", description = "Пользователь успешно аутентифицирован, возвращён токен",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LoginResponseDTO.class))),
             @ApiResponse(responseCode = "401", description = "Предоставлены неверные учётные данные"),
             @ApiResponse(responseCode = "400", description = "Пользователь не подтверждён")
     })
@@ -54,7 +61,7 @@ public class AuthenticationController {
     }
 
     /**
-     * Регистрирует нового пользователя с указанными данными и отправляет email для подтверждения.
+     * Регистрирует нового пользователя с указанными данными.
      * @param data Данные пользователя для регистрации, передаются в теле запроса.
      * @return Ответ, содержащий сообщение об успешной регистрации.
      */
@@ -70,46 +77,5 @@ public class AuthenticationController {
 
         authService.signup(data);
         return ResponseEntity.ok(bundle.getString("user.successfully_signed_up"));
-    }
-
-    /**
-     * Подтверждает email пользователя с указанными email и токеном.
-     * @param email Email пользователя для подтверждения.
-     * @param token Токен для подтверждения email пользователя.
-     * @return Ответ, содержащий сообщение об успешном подтверждении email.
-     */
-    @Operation(summary = "Подтверждение email пользователя", description = "Подтверждение email пользователя с указанными email и токеном")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Email пользователя успешно подтверждён"),
-            @ApiResponse(responseCode = "400", description = "Пользователь уже подтверждён"),
-            @ApiResponse(responseCode = "401", description = "Предоставлен неверный токен"),
-            @ApiResponse(responseCode = "404", description = "Пользователь не найден")
-    })
-    @PostMapping("/verify-account")
-    public ResponseEntity<String> verifyAccount(
-            @RequestParam String email,
-            @RequestParam String token) {
-
-        authService.verifyAccount(email, token);
-        return ResponseEntity.ok(bundle.getString("user.successfully_verified"));
-    }
-
-    /**
-     * Повторно отправляет email для подтверждения пользователю с указанным email.
-     * @param email Email пользователя для повторной отправки подтверждения.
-     * @return Ответ, содержащий сообщение об успешной повторной отправке.
-     */
-    @Operation(summary = "Повторная отправка email для подтверждения", description = "Повторная отправка email для подтверждения пользователю с указанным email")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Email для подтверждения успешно отправлен повторно"),
-            @ApiResponse(responseCode = "400", description = "Пользователь уже подтверждён"),
-            @ApiResponse(responseCode = "404", description = "Пользователь не найден")
-    })
-    @PostMapping("/resend-verification")
-    public ResponseEntity<String> resendVerification(
-            @RequestParam String email) {
-
-        authService.resendVerification(email);
-        return ResponseEntity.ok(bundle.getString("user.verification_email_resent"));
     }
 }
